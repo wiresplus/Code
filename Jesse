@@ -25,7 +25,7 @@ byte I2 = 3;
 byte I3 = 4;
 byte I4 = 5; //defined but unused in Version 1.2
 byte I5 = 6;
-
+ 
 // Run setup tasks
 void setup() {
   // code here runs once:
