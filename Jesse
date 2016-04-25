@@ -1,0 +1,81 @@
+/* Created by: Bevan Simpkin
+   Date: Apr 2016
+   Version 1.2
+   Reference: www.wiresplus.co.nz/code
+
+   Jesse's Remote Controller
+   This program is to allow Jesse to use the wireless remotes for his auto door openers, and also to control his seat cooling fan.
+   Outputs drive relays, which simulate button presses on the door control key fobs
+   One output drives his cooling fans, again via relay
+   There are 3 doors at present. we will use 3 button switches for these
+   Then we will use another button for fan on/off control
+
+   Licensed under a Creative Commons Attribution-ShareAlike 3.0 License. http://creativecommons.org/licenses/by-sa/3.0/
+*/
+//  Set up Global Variables
+// name outputs. Start at Pin D8 (Arduino board pin 8)
+byte Q1 = 8;
+byte Q2 = 9;
+byte Q3 = 10;
+byte Q4 = 11; //defined but unused in Version 1.2
+byte Q5 = 12;
+//name inputs. Start at Pin D2 (Arduino board pin 2)
+byte I1 = 2;
+byte I2 = 3;
+byte I3 = 4;
+byte I4 = 5; //defined but unused in Version 1.2
+byte I5 = 6;
+
+// Run setup tasks
+void setup() {
+  // code here runs once:
+  // set pin modes
+  pinMode(Q1, OUTPUT);
+  pinMode(Q2, OUTPUT);
+  pinMode(Q3, OUTPUT);
+  pinMode(Q4, OUTPUT); //defined but unused in Version 1.2
+  pinMode(Q5, OUTPUT);
+  pinMode(I1, INPUT);
+  pinMode(I2, INPUT);
+  pinMode(I3, INPUT);
+  pinMode(I4, INPUT); //defined but unused in Version 1.2
+  pinMode(I5, INPUT);
+  // Set the quiescent state - relay module treats HIGH as OFF
+}
+//Arduino is ready!
+//Run the main code
+void loop() {
+  // code here runs repeatedly:
+  // Declare Loop Scope Variables
+  int outputTimer = 300; //milliseconds the momentary relays turn on
+  int deBounce = 500; //milliseconds to prevent rapid fan cycling
+  byte fan = digitalRead(Q5); //fan state
+  // Code
+  //watch inputs for low pulse, and operate associated output
+
+  digitalWrite(Q1, digitalRead(I1));
+  digitalWrite(Q2, digitalRead(I2));
+  digitalWrite(Q3, digitalRead(I3));
+
+  //Check for current fan output state
+  if (fan == HIGH) {    //1 -- Fan is off
+    // Check for button 'On' press
+    if (digitalRead(I5) == LOW) {   //2
+      digitalWrite(Q5, LOW);
+      delay(deBounce);
+    }
+    else    //This 'else' belongs to the IF statement marked //2 above
+    {} // Button not pressed, do nothing (leave fan off). End of IF statement //2
+
+  } else {  // -- Fan is already on. This 'else' belongs to the IF statement marked //1 above
+    // Check for button 'Off' press
+    if (digitalRead(I5) == LOW) {    //3
+      digitalWrite(Q5, HIGH);
+      delay(deBounce);
+    }
+    else    //This 'else' belongs to the IF statement marked //3 above
+    {} // Button not pressed, do nothing (leave fan on). End of IF statement //3
+
+  } //end of IF statement //1
+
+} // End of the loop. Go back to the beginning of the loop and start again.
