@@ -1,6 +1,6 @@
 /* Created by: Bevan Simpkin
    Date: Apr 2016
-   Version 1.2
+   Version 1.3
    Reference: www.wiresplus.co.nz/code
 
    Jesse's Remote Controller
@@ -17,15 +17,13 @@
 byte Q1 = 8;
 byte Q2 = 9;
 byte Q3 = 10;
-byte Q4 = 11; //defined but unused in Version 1.2
-byte Q5 = 12;
+byte Q4 = 11;
 //name inputs. Start at Pin D2 (Arduino board pin 2)
 byte I1 = 2;
 byte I2 = 3;
 byte I3 = 4;
-byte I4 = 5; //defined but unused in Version 1.2
-byte I5 = 6;
- 
+byte I4 = 5;
+
 // Run setup tasks
 void setup() {
   // code here runs once:
@@ -33,23 +31,18 @@ void setup() {
   pinMode(Q1, OUTPUT);
   pinMode(Q2, OUTPUT);
   pinMode(Q3, OUTPUT);
-  pinMode(Q4, OUTPUT); //defined but unused in Version 1.2
-  pinMode(Q5, OUTPUT);
+  pinMode(Q4, OUTPUT);
   pinMode(I1, INPUT);
   pinMode(I2, INPUT);
   pinMode(I3, INPUT);
-  pinMode(I4, INPUT); //defined but unused in Version 1.2
-  pinMode(I5, INPUT);
-  // Set the quiescent state - relay module treats HIGH as OFF
+  pinMode(I4, INPUT);
 }
 //Arduino is ready!
 //Run the main code
 void loop() {
   // code here runs repeatedly:
   // Declare Loop Scope Variables
-  int outputTimer = 300; //milliseconds the momentary relays turn on
   int deBounce = 500; //milliseconds to prevent rapid fan cycling
-  byte fan = digitalRead(Q5); //fan state
   // Code
   //watch inputs for low pulse, and operate associated output
 
@@ -58,10 +51,10 @@ void loop() {
   digitalWrite(Q3, digitalRead(I3));
 
   //Check for current fan output state
-  if (fan == HIGH) {    //1 -- Fan is off
+  if (Q4 == HIGH) {    //1 -- Fan is off
     // Check for button 'On' press
-    if (digitalRead(I5) == LOW) {   //2
-      digitalWrite(Q5, LOW);
+    if (digitalRead(I4) == LOW) {   //2
+      digitalWrite(Q4, LOW);
       delay(deBounce);
     }
     else    //This 'else' belongs to the IF statement marked //2 above
@@ -69,8 +62,8 @@ void loop() {
 
   } else {  // -- Fan is already on. This 'else' belongs to the IF statement marked //1 above
     // Check for button 'Off' press
-    if (digitalRead(I5) == LOW) {    //3
-      digitalWrite(Q5, HIGH);
+    if (digitalRead(I4) == LOW) {    //3
+      digitalWrite(Q4, HIGH);
       delay(deBounce);
     }
     else    //This 'else' belongs to the IF statement marked //3 above
